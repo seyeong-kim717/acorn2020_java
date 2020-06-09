@@ -21,6 +21,7 @@ public class MainClass03 {
 		//논리 연산의 결과로 얻어진 boolean 값 담기
 		boolean result=true||false;
 		
+		
 		//한번 선언한 변수는 다시 선언 할수 없다.
 		//boolean result=false;
 		result=false; //변수에 다른 값을 대입 할수 있다(동일한 type 인 경우)

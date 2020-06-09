@@ -14,4 +14,8 @@ public class SmartPhone extends HandPhone {
 		//super.takePicture();
 		System.out.println("1000만 화소의 사진을 찍어요");
 	}
+	@Override
+	public void mobileCall() {
+		System.out.println("이동중 전화 안됨.");
+	}
 }

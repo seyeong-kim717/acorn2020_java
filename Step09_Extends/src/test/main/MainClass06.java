@@ -9,5 +9,6 @@ public class MainClass06 {
 		p1.doInternet();
 		//SmartPhone 클래스에서 오버라이드된 메소드가 호출된다.
 		p1.takePicture();
+		
 	}
 }
