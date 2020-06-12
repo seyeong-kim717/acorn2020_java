@@ -7,7 +7,7 @@ public class MainClass08 {
 	public static void main(String[] args) {
 		/*
 		 * HashMap<key값의 type, value값의 type>
-		 * 대부분 키값은 string 이고 value의 값도 object를 많이 쓴다 여러 타입 섞이기 때문.
+		 * 대부분 key값은 string 이고 value의 값도 object를 많이 쓴다 여러 타입 섞이기 때문.
 		 */
 		Map<String, Object> map1=new HashMap<>();//key, value 값
 		map1.put("num", 1);
