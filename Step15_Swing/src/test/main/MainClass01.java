@@ -38,9 +38,9 @@ public class MainClass01 {
 			setVisible(true);
 			
 			setLayout(null);
-			JButton btn1=new JButton("눌러봐");
-			setBounds(10, 10, 100, 40);
-			add(btn1);
+			JButton btn=new JButton("눌러봐");
+			btn.setBounds(10, 10, 100, 40);
+			add(btn);
 			
 		}
 	}
