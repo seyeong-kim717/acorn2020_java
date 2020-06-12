@@ -26,6 +26,10 @@ public class MyFrame extends JFrame implements ActionListener {
 		//프레임에 버튼 추가 하기(FlowLayout의 영향을 받는다.)
 		add(sendBtn);
 		add(removeBtn);
+		
+		//MyFrame 객체의 참조값을 전달해서 리스너 등록하기 
+		sendBtn.addActionListener(this);
+		removeBtn.addActionListener(this);
 
 	}
 		

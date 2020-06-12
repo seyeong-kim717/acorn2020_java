@@ -1,5 +1,6 @@
 package test.frame8;
 
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +18,7 @@ public class MyFrame extends JFrame implements ActionListener {
 	public MyFrame() {
 		setLayout(new FlowLayout());
 		//문자열 한줄을 입력 할수 있는 JtextField
-		JTextField inputMsg=new JTextField(10);
+		inputMsg=new JTextField(10);
 		add(inputMsg);
 		
 		JButton sendBtn=new JButton("전송");
