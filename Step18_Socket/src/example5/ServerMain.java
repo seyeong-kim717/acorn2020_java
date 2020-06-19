@@ -130,7 +130,13 @@ public class ServerMain {
 			}finally {
 				//접속이 끊겨서 종료되는 스레드는 List에서 제거 한다.
 				threadList.remove(this);//참조값을 찾아서 제거 가능.
+				//this가 퇴장한다고 메세지를 보낸다
 				try {
+					JSONObject jsonObj=new JSONObject();
+					jsonObj.put("type", "out");
+					jsonObj.put("name", this.chatName);
+					sendMessage(jsonObj.toString());
+					
 					if(socket!=null)socket.close();
 				}catch(Exception e) {}
 			}

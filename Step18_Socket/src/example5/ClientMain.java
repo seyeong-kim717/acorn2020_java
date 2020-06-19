@@ -14,15 +14,18 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /*
@@ -51,15 +54,14 @@ import org.json.JSONObject;
  *  {"name":"kim", "friends":["김구라","해골","원숭이"]
  *  
  *  메세지의 종류
- *  
- * 1. 일반 대화 메세지 
- * 		{"type" :"msg"  "name":"김구라", "content":"안녕하세요"}   {}는 JSONObject
- * 2. 누군가 입장 했다는 메세지 
- * 		{"type" :  "enter":"김구라", "members":["김구라","해골","원숭이"]}
- * 3. 누군가 퇴장 했다는 메세지 
- * 		{"type" :  "out":"원숭이","members" : ["김구라","해골"]}
- * 4. 참여자 목록 메세지
- * 		{"type" :  "members" :["김구라","해골","원숭이"]}  []는 JSONArray
+ *   1. 일반 대화 메세지  
+ *      {"type":"msg","name":"김구라", "content":"안녕하세요"} {}는 JSONObject []는 JSONArray
+ *   2. 누군가 입장 했다는 메세지
+ *      {"type":"enter", "name":"김구라"}
+ *   3. 누군가 퇴장 했다는 메세지
+ *      {"type":"out", "name":"원숭이"}
+ *   4. 참여자 목록 메세지
+ *      {"type":"members", "list":["김구라","해골","원숭이"]}
  */
 public class ClientMain extends JFrame 
 		implements ActionListener,KeyListener{
@@ -141,6 +143,22 @@ public class ClientMain extends JFrame
 		//엔터키로 메세지 전송 가능하게
 		tf_msg.addKeyListener(this);
 		
+		//Vector는 ArrayList 와 같다고 생각하고 사용!
+		//추가기능 (스레드 동기화)가 있어서 조금더 무겁다.
+		Vector<String> vec=new Vector<>();
+		vec.add("김구라");
+		vec.add("해골");
+		vec.add("원숭이");
+		
+		JList<String> jList=new JList<String>(vec);
+		jList.setBackground(Color.MAGENTA);
+		
+		JPanel leftPanel=new JPanel();
+		leftPanel.add(jList);
+		leftPanel.setBackground(Color.LIGHT_GRAY);
+		add(leftPanel, BorderLayout.EAST);
+		
+		
 	}// 생성자
 	public static void main(String[] args) {
 		//프레임 객체 생성
@@ -195,18 +213,8 @@ public class ClientMain extends JFrame
 				while(true) {
 					//서버로 부터 무자열이 전송되는지 대기한다
 					String msg=br.readLine();
-					JSONObject jsonObj=new JSONObject(msg);
-					String type=jsonObj.getString("type");
-					if (type.equals("enter")) {//입장 메세지라면
-						//누가 입장했는지 읽어 낸다.
-						String name=jsonObj.getString("name");
-						area.append("["+name+"] 님이 입장했습니다.");
-						area.append("\r\n");
-					}else if(type.equals("msg")) {// 대화 메세지 라면
-						//누가
-						String name=jsonObj.getString("name");
-					}
-
+					//메소드를 호출하면서 문자열 전달
+					updateTextArea(msg);
 					//최근 추가된 글 내용이 보일 수 있도록
 					int docLength=area.getDocument().getLength();
 					area.setCaretPosition(docLength);
@@ -219,8 +227,38 @@ public class ClientMain extends JFrame
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}//run()
+		
+		//JTextArea에 문자열을 출력하는 메소드
+		public void updateTextArea(String msg) {
+			try {
+				JSONObject jsonObj=new JSONObject(msg);
+				String type=jsonObj.getString("type");
+				if (type.equals("enter")) {//입장 메세지라면
+					//누가 입장했는지 읽어 낸다.
+					String name=jsonObj.getString("name");
+					area.append("["+name+"] 님이 입장했습니다.");
+					area.append("\r\n");
+				}else if(type.equals("msg")) {// 대화 메세지 라면
+					//누가
+					String name=jsonObj.getString("name");
+					//어떤 내용을
+					String content=jsonObj.getString("content");
+					//출력하기
+					area.append(name+" : "+content);
+					area.append("\r\n");
+				}else if(type.equals("out")) {
+					//누가
+					String name=jsonObj.getString("name");
+					//출력하기
+					area.append("[["+name+"]] 님이 퇴장 했습니다.");
+					area.append("\r\n");
+				}
+			}catch (JSONException je) {
+				je.printStackTrace();
+			}
 		}
-	}
+	}// class ClientThread
 	@Override
 	public void keyPressed(KeyEvent e) {
 		//눌러진 키의 코드값
