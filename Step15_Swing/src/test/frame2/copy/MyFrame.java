@@ -16,7 +16,7 @@ public class MyFrame extends JFrame {
 		//프레임의 레이아웃 매니저를 FlowLayout으로 지정한다.
 //		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//레이아웃 매니저를 GridLayout로 지정하기 (2행 2열)
+//		//레이아웃 매니저를 GridLayout로 지정하기 (2행 2열)
 		setLayout(new GridLayout(4, 1));
 		
 		JButton btn1=new JButton("버튼1");

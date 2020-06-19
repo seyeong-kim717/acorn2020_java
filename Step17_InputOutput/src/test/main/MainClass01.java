@@ -9,6 +9,7 @@ public class MainClass01 {
 		//InputStream 객체는 1byte 단위 처리 스트림이다
 		//영문자 대소문자, 숫자, 특수문자만 처리 할 수 있다.
 		//한글 처리 불가
+		System.out.println("입력하세요!");
 		InputStream kbd=System.in;
 		try {
 			int code=kbd.read();

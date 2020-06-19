@@ -39,6 +39,7 @@ public class MyFrame extends JFrame {
 //			}
 //			
 //		};
+		
 
 	//객체의 참조값을 전달해야 한다.
 		sendBtn.addActionListener(listener);
