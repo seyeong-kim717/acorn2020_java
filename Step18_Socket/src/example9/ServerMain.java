@@ -1,4 +1,4 @@
-package example5;
+package example9;
 
 
 import java.io.BufferedReader;
@@ -13,14 +13,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 /*
  * 떨어져 있는 컴퓨터 끼리 통신 할수 있는 예제 만들어 보기.
  */
 public class ServerMain {
 	//static 필드 (스테틱 메소드 이기 때문에 스테틱 선언 해야 사용 가능)
-	static List<ServerThread> threadList = new ArrayList<>();
+	static List<ServerThread> threadList= new ArrayList<>();
 
 	public static void main(String[] args) {
 		//필요한 객체를 저장 할 지역변수 미리 만들기
@@ -76,24 +75,6 @@ public class ServerMain {
 				tmp.bw.flush();//방출
 			}
 		}
-		//참여자 목록을 얻어내서 Client 에게 출력해주는 메소드
-		public void sendChatNameList() {
-			JSONObject jsonObj=new JSONObject();
-			JSONArray jsonArr=new JSONArray();
-			//스레드 리스트에서 대화명을 순서대로 참조해서 JSONArray 객체에 순서대로 넣기
-			for(int i=0; i<threadList.size(); i++) {
-				ServerThread tmp=threadList.get(i);
-				jsonArr.put(i, tmp.chatName);
-			}
-			jsonObj.put("type", "members");
-			jsonObj.put("list", jsonArr);
-			
-			try {
-				sendMessage(jsonObj.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 		
 		
 		//새로운 작업 단위가 시작되는 run() 메소드
@@ -134,8 +115,8 @@ public class ServerMain {
 						//현재 스레드가 대응한는 클라이언트의 대화명을 필드에 저장한다.
 						String chatName=jsonObj.getString("name");
 						this.chatName=chatName;
-						//대화명 목록을 보내준다
-						sendChatNameList();
+					}else if (type.equals("msg")) {
+						
 					}
 					
 					//클라이언트에게 동일한 메세지를 보내는 메소드를 호출한다.
@@ -155,8 +136,7 @@ public class ServerMain {
 					jsonObj.put("type", "out");
 					jsonObj.put("name", this.chatName);
 					sendMessage(jsonObj.toString());
-					//대화명 목록을 보내준다.
-					sendChatNameList();
+					
 					if(socket!=null)socket.close();
 				}catch(Exception e) {}
 			}
