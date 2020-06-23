@@ -18,7 +18,7 @@ import test.util.DBConnect;
  *   3. 자신의 참조값을 오직 하나만 생성해서 리턴해주는 static 메소드 만들기
  *   4. 나머지 기능(select,insert,update,delete)들은 non static으로 만들기.
  */
-public class MemberDao {
+public class MemberDao {//!!!
 	//자신이 참조값을 저장할 private 필드
 	private static MemberDao dao;
 	
@@ -31,7 +31,7 @@ public class MemberDao {
 			dao=new MemberDao();//객체 생성해서 static 필드에 담는다
 		}
 		return dao;
-	}
+	}//!!!  작성 할수 있어야 한다. 시험.!
 	//회원 한명의 정보를 리턴해주는 메소드
 	public MemberDto getData(int num) {
 		MemberDto dto=null;
@@ -103,16 +103,17 @@ public class MemberDao {
 		return list;
 	}
 	//회원 한명의 정보를 DB에서 삭제하는 메소드
-	public void delete(int num) {
+	public boolean delete(int num) {
 		Connection conn=null;
 		PreparedStatement pstmt=null;
+		int flag=0;
 		try {
 			conn=new DBConnect().getConn();
 			String sql="DELETE FROM member"
 					+ " WHERE num=?";
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, num);
-			pstmt.executeUpdate();
+			flag=pstmt.executeUpdate();
 			System.out.println("회원정보를 삭제 했습니다.");			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -122,11 +123,17 @@ public class MemberDao {
 				if(conn!=null)conn.close();
 			}catch (Exception e) {}
 	}
+		if(flag>0) {
+			return true;
+		}else {
+			return false;
 		}
-	//회원정보를 DB에 저장하는 메소드
-	public void insert(MemberDto dto) {
+		}
+	//회원정보를 DB에 저장하는 메소드(작업의 성공 여부가 bolean으로 리턴된다.)
+	public boolean insert(MemberDto dto) {
 		Connection conn=null;
 		PreparedStatement pstmt=null;
+		int flag=0;
 		try {
 			conn=new DBConnect().getConn();
 			String sql="INSERT INTO member"
@@ -135,7 +142,8 @@ public class MemberDao {
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getName());
 			pstmt.setString(2, dto.getAddr());
-			pstmt.executeUpdate();
+			//sql 문을 수행하고 변화된 row의 갯수를 리턴 받는다. (1)
+			flag=pstmt.executeUpdate();
 			System.out.println("회원 정보를 추가 했습니다.");
 	}catch (Exception e) {
 		e.printStackTrace();
@@ -145,12 +153,18 @@ public class MemberDao {
 			if(conn!=null)conn.close();
 		}catch (Exception e) {
 		}
+		if(flag>0) {
+			return true; //작업 성공 이란 의미에서 true를 리턴한다.
+		}else {
+			return false; //작업 실패라는 의미에서 false를 리턴한다.
+		}
 	}
 }
 	//회원정보를 DB에 수정하는 메소드
-	public void update(MemberDto dto) {
+	public boolean update(MemberDto dto) {
 		Connection conn=null;
 		PreparedStatement pstmt=null;
+		int flag=0;
 		try {
 			conn=new DBConnect().getConn();
 			String sql="UPDATE member"
@@ -160,7 +174,8 @@ public class MemberDao {
 			pstmt.setString(1, dto.getName());
 			pstmt.setString(2, dto.getAddr());
 			pstmt.setInt(3, dto.getNum());
-			pstmt.executeUpdate();
+			//update 된 row의 갯수가 반환된다.
+			flag=pstmt.executeUpdate();
 			System.out.println("정보 수정!");
 	}catch (Exception e) {
 		e.printStackTrace();
@@ -169,6 +184,11 @@ public class MemberDao {
 			if(pstmt!=null)pstmt.close();
 			if(conn!=null)conn.close();
 		}catch (Exception e) {
+		}
+		if(flag>0) {
+			return true;
+		}else {
+			return false;
 		}
 		}
 	}
