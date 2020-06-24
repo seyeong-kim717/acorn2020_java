@@ -43,8 +43,8 @@ public class MemberDao {//!!!
 		try {
 			conn=new DBConnect().getConn();
 			String sql="SELECT name,addr"
-					+ "FROM member"
-					+ "WHERE num=?";
+					+ " FROM member"
+					+ " WHERE num=?";
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, num);
 			rs=pstmt.executeQuery();
@@ -58,6 +58,7 @@ public class MemberDao {//!!!
 			e.printStackTrace();
 		}finally {
 			try {
+				if(rs!=null)rs.close();
 				if(pstmt!=null)pstmt.close();
 				if(conn!=null)conn.close();
 			}catch (Exception e) {}
