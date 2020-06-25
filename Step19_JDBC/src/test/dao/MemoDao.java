@@ -46,11 +46,11 @@ public class MemoDao {
 			//반복문 돌면서 select 된 메모정보  읽어오기
 			while(rs.next()) {
 				//MemoDto 객체 생성해서 
-				dto=new MemoDto();
+				dto=new MemoDto(num,"content","regdate");
 				//메모 한명의 정보를 담는다. 
-				dto.setNum(num);
-				dto.setContent(rs.getString("content"));
-				dto.setRegdate(rs.getString("regdate"));
+//				dto.setNum(num);
+//				dto.setContent(rs.getString("content"));
+//				dto.setRegdate(rs.getString("regdate"));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
